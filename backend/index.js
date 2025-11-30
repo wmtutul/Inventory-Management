@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./db_connection/connection.js";
-
+import authRoutes from './src/routes/auth.js';
 
 
 const app = express();
@@ -11,6 +11,8 @@ app.use(bodyParser.json());
 app.use(cors());
 dotenv.config();
 
+//routing
+app.use('/api/auth', authRoutes);
 
 //Database Connection
 const PORT = process.env.PORT || 7000;

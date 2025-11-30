@@ -1,6 +1,7 @@
-import connectDB from "./db_connection/connection.js";
-import User from "./src/models/User.js";
+
 import bcrypt from 'bcrypt';
+import User from "./src/models/User.js";
+import connectDB from "./db_connection/connection.js";
 
 
 
@@ -24,5 +25,6 @@ const register = async () => {
 }
 
 register();
+
 
 
