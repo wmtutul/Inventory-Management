@@ -20,7 +20,13 @@ const App = () => {
             }
         >
           <Route index element={<h1>Summary of dashboard</h1>} />   
-
+          <Route path='categories' element={<h1>Categories</h1>} />   
+          <Route path='products' element={<h1>Products</h1>} />   
+          <Route path='suppliers' element={<h1>Suppliers</h1>} />   
+          <Route path='orders' element={<h1>Orders</h1>} />   
+          <Route path='users' element={<h1>Users</h1>} />   
+          <Route path='profile' element={<h1>Profile</h1>} />   
+          <Route path='logout' element={<h1>Logout</h1>} />   
         </Route>
 
         <Route path='/customer/dashboard' element={<h1>customer dashboard</h1>} />
