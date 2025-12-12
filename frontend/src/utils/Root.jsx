@@ -12,9 +12,9 @@ const Root = () => {
         if(user) {
             //Check if the user is authenticated and redirect accordingly
             if(user.role === "admin"){
-                navigate("/admin/dashboard");
+                navigate("/admin-dashboard");
             }else if(user.role === "customer") {
-                navigate("/employee/dashboard");
+                navigate("/customer-dashboard");
             }else {
                 navigate("/login");
             }

@@ -50,7 +50,7 @@ const Login = () => {
 
 
   return (
-    <div className='flex flex-col items-center h-screen justify-center bg-linear-to-b from-green-600 from-50% to-gray-100 to-50% space-y-6'> //bg-linear-to-b
+    <div className='flex flex-col items-center h-screen justify-center bg-linear-to-b from-green-600 from-50% to-gray-100 to-50% space-y-6'> 
         <h2 className='text-3xl text-white'>Inventory Management System</h2>
         <div className='border shadow-lg p-6 w-80 bg-white'>
           <h2 className='text-2xl font-bold mb-4'>Login</h2>
