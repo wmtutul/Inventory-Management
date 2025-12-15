@@ -5,14 +5,15 @@ import cors from "cors";
 import connectDB from "./db_connection/connection.js";
 import authRoutes from './src/routes/auth.js';
 import categoryRoutes from './src/routes/category.js';
+import supplierRoutes from './src/routes/supplier.js';
 
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 
 
 dotenv.config();
@@ -23,6 +24,8 @@ dotenv.config();
 //routing
 app.use('/api/auth', authRoutes);
 app.use('/api/category', categoryRoutes);
+app.use('/api/supplier', supplierRoutes);
+
 
 //Database Connection
 const PORT = process.env.PORT || 7000;

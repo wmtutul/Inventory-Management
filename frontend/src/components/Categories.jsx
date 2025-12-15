@@ -33,7 +33,6 @@ const Categories = () => {
   };
 
 
-
   useEffect(() => {
     fetchCategories();
   }, []);
