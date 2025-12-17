@@ -14,6 +14,9 @@ const Suppliers = () => {
 
     const [loading, setLoading] = useState(false);
     const [suppliers, setSuppliers] = useState([]);
+    const [filteredSuppliers, setFilteredSuppliers] = useState([]);
+
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -33,6 +36,7 @@ const Suppliers = () => {
             });
 
             setSuppliers(response.data.suppliers);
+            setFilteredSuppliers(response.data.suppliers);
 
         } catch (error) {
 
@@ -91,8 +95,10 @@ const Suppliers = () => {
                 );
 
                 if (response.data.success) {
-                    alert("Supplier added successfully!");
+                    fetchSuppliers();
+                    alert("Supplier edited successfully!");
                     setAddModal(false);
+                    setEditSupplier();
                     setFormData({
                         name: "",
                         email: "",
@@ -121,6 +127,7 @@ const Suppliers = () => {
                 );
 
                 if (response.data.success) {
+                    fetchSuppliers();
                     alert("Supplier added successfully!");
                     setAddModal(false);
                     setFormData({
@@ -140,6 +147,37 @@ const Suppliers = () => {
             }
         }
     };
+
+
+    const handleDelete = async (id) => {
+        const confirmDelete = window.confirm(
+            "Are you sure ! you want to delete this Supplier?");
+        if (confirmDelete) {
+            try {
+                const response = await axios.delete(
+                    `http://localhost:8000/api/supplier/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
+                        },
+                    }
+                );
+
+                if (response.data.success) {
+                    alert("Supplier deleted successfully!");
+                    fetchSuppliers(); //Refresh the Supplliers list after deletion
+                } else {
+                    console.error("Error deleting supplier", data);
+                    alert("Error deleting supplier. please try again.");
+                }
+
+            } catch (error) {
+                console.error("Error deleting supplier:", error);
+                alert("Error deleting supplier. Please try again.");
+            }
+        }
+    };
+
 
 
 
@@ -184,7 +222,10 @@ const Suppliers = () => {
                                     >
                                         Edit
                                     </button>
-                                    <button className='px-2 py-1 bg-red-500 text-white rounded cursor-pointer'>
+                                    <button
+                                        className='px-2 py-1 bg-red-500 text-white rounded cursor-pointer'
+                                        onClick={() => handleDelete(supplier._id)}
+                                    >
                                         Delete
                                     </button>
                                 </td>
