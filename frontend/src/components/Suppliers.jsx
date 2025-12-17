@@ -180,13 +180,27 @@ const Suppliers = () => {
 
 
 
+    const handleSearch = (e) => {
+        setFilteredSuppliers(
+            suppliers.filter((supplier) => 
+             supplier.name.toLowerCase().includes(e.target.value.toLowerCase()))
+        );
+    }
+
+
+
 
 
     return (
         <div className='w-full h-full flex flex-col gap-4 p-4'>
             <h1 className='text-2xl font-bold'>Supplier Management</h1>
             <div className='flex justify-between items-center'>
-                <input type="text" placeholder='Search' className='border p-1 bg-white rounded px-4' />
+                <input 
+                    type="text" 
+                    placeholder='Search' 
+                    className='border p-1 bg-white rounded px-4' 
+                    onChange={handleSearch}
+                />
                 <button
                     className='px-4 py-1.5 bg-blue-500 text-white rounded cursor-pointer'
                     onClick={() => setAddModal(1)}
@@ -196,43 +210,46 @@ const Suppliers = () => {
             </div>
 
             {loading ? <div>Loading......</div> : (
-                <table className='w-full border-collapse border border-gray-300 mt-4'>
-                    <thead>
-                        <tr className='bg-gray-200'>
-                            <th className='border border-gray-300 p-2'>S_NO</th>
-                            <th className='border border-gray-300 p-2'>Supplier Name</th>
-                            <th className='border border-gray-300 p-2'>Email</th>
-                            <th className='border border-gray-300 p-2'>Phone Number</th>
-                            <th className='border border-gray-300 p-2'>Address</th>
-                            <th className='border border-gray-300 p-2'>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {suppliers.map((supplier, index) => (
-                            <tr key={supplier._id}>
-                                <td className='border border-gray-300 p-2'>{index + 1}</td>
-                                <td className='border border-gray-300 p-2'>{supplier.name}</td>
-                                <td className='border border-gray-300 p-2'>{supplier.email}</td>
-                                <td className='border border-gray-300 p-2'>{supplier.number}</td>
-                                <td className='border border-gray-300 p-2'>{supplier.address}</td>
-                                <td className='border border-gray-300 p-2'>
-                                    <button
-                                        className='px-2 py-1 bg-yellow-500 text-white rounded cursor-pointer mr-2'
-                                        onClick={() => handleEdit(supplier)}
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        className='px-2 py-1 bg-red-500 text-white rounded cursor-pointer'
-                                        onClick={() => handleDelete(supplier._id)}
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
+                <div>
+                    <table className='w-full border-collapse border border-gray-300 mt-4'>
+                        <thead>
+                            <tr className='bg-gray-200'>
+                                <th className='border border-gray-300 p-2'>S_NO</th>
+                                <th className='border border-gray-300 p-2'>Supplier Name</th>
+                                <th className='border border-gray-300 p-2'>Email</th>
+                                <th className='border border-gray-300 p-2'>Phone Number</th>
+                                <th className='border border-gray-300 p-2'>Address</th>
+                                <th className='border border-gray-300 p-2'>Action</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {filteredSuppliers.map((supplier, index) => (
+                                <tr key={supplier._id}>
+                                    <td className='border border-gray-300 p-2'>{index + 1}</td>
+                                    <td className='border border-gray-300 p-2'>{supplier.name}</td>
+                                    <td className='border border-gray-300 p-2'>{supplier.email}</td>
+                                    <td className='border border-gray-300 p-2'>{supplier.number}</td>
+                                    <td className='border border-gray-300 p-2'>{supplier.address}</td>
+                                    <td className='border border-gray-300 p-2'>
+                                        <button
+                                            className='px-2 py-1 bg-yellow-500 text-white rounded cursor-pointer mr-2'
+                                            onClick={() => handleEdit(supplier)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className='px-2 py-1 bg-red-500 text-white rounded cursor-pointer'
+                                            onClick={() => handleDelete(supplier._id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    {filteredSuppliers.length === 0 && <div>No records</div>}
+                </div>
             )}
 
 
