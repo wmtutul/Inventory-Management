@@ -6,18 +6,14 @@ import connectDB from "./db_connection/connection.js";
 import authRoutes from './src/routes/auth.js';
 import categoryRoutes from './src/routes/category.js';
 import supplierRoutes from './src/routes/supplier.js';
+import productRoutes from './src/routes/product.js';
 
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-
-
 dotenv.config();
-
 
 
 
@@ -25,6 +21,9 @@ dotenv.config();
 app.use('/api/auth', authRoutes);
 app.use('/api/category', categoryRoutes);
 app.use('/api/supplier', supplierRoutes);
+app.use('/api/products', productRoutes);
+
+
 
 
 //Database Connection
@@ -33,6 +32,7 @@ app.listen(PORT, ()=>{
         connectDB();
         console.log(`Server is running on port: http://localhost:${PORT}`)
 })
+
 
 
 
