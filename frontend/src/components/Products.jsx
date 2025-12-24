@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react'
 
 const Products = () => {
     const [openModal, setOpenModal] = useState(false);
+    const [editProduct, setEditProduct] = useState(null);
     const [categories, setCategories] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
+    const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
         name: "",
         description: "",
@@ -15,7 +17,7 @@ const Products = () => {
     });
 
 
-    const fatchProducts = async () => {
+    const fetchProducts= async () => {
         try {
             const response = await axios.get("http://localhost:8000/api/products", {
                 headers: {
@@ -23,19 +25,26 @@ const Products = () => {
                 },
             });
 
-            setSuppliers(response.data.suppliers);
-            setCategories(response.data.categories);
+            if (response.data.success) {
+                setSuppliers(response.data.suppliers);
+                setCategories(response.data.categories);
+                setProducts(response.data.products);
+
+            } else {
+
+                console.error("Error fetching products:", response.data.message);
+                alert("Error fetching products. Please try again.");
+            }
 
         } catch (error) {
-
             console.error("Error fetching suppliers:", error);
         }
-    }
+    };
 
 
 
     useEffect(() => {
-        fatchProducts();
+        fetchProducts();
     }, []);
 
 
@@ -48,40 +57,102 @@ const Products = () => {
     }
 
 
+    const handleEdit = (product) => {
+        setOpenModal(true);
+        setEditProduct(product._id);
+        setFormData({
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            stock: product.stock,
+            categoryId: product.categoryId._id,
+            supplierId: product.supplierId._id,
+        });
+    };
+
+
+    const closeModel = () => {
+        setOpenModal(false);
+        setEditProduct(null);
+        setFormData({
+            name: "",
+            description: "",
+            price: "",
+            stock: "",
+            categoryId: "",
+        });
+    }
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            const response = await axios.post(
-                "http://localhost:8000/api/products/add",
-                formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
-                    },
+        if (editProduct) {
+            try {
+                const response = await axios.put(
+                    `http://localhost:8000/api/products/${editProduct}`,
+                    formData,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
+                        },
+                    }
+                );
+                if (response.data.success) {
+                    alert("Product updated successfully!");
+                    fetchProducts();
+                    setOpenModal(false);
+                    setEditProduct(null);
+                    setFormData({
+                        name: "",
+                        description: "",
+                        price: "",
+                        stock: "",
+                        categoryId: "",
+                        supplierId: "",
+                    });
+                } else {
+                    alert("Error updating Product. Please try again");
                 }
-            );
 
-            if (response.data.success) {
-                // fetchSuppliers();  
-                alert("Products added successfully!");
-                setOpenModal(false);
-                setFormData({
-                    name: "",
-                    description: "",
-                    price: "",
-                    stock: "",
-                    categoryId: "",
-                    supplierId: "",
+            } catch (error) {
+                alert("Error updating Product. Please try again.");
+            }
+            return;
+        } else {
 
-                });
-            } else {
-                // console.error("Error adding category:", response.data);
+            try {
+                const response = await axios.post(
+                    "http://localhost:8000/api/products/add",
+                    formData,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
+                        },
+                    }
+                );
+
+                if (response.data.success) {
+                    fetchProducts();  
+                    alert("Products added successfully!");
+                    setOpenModal(false);
+                    setFormData({
+                        name: "",
+                        description: "",
+                        price: "",
+                        stock: "",
+                        categoryId: "",
+                        supplierId: "",
+
+                    });
+                } else {
+                    // console.error("Error adding category:", response.data);
+                    alert("Error adding Product. Please try again.");
+                }
+            } catch (error) {
+                // console.error("Error adding suplier:", error);
                 alert("Error adding Product. Please try again.");
             }
-        } catch (error) {
-            // console.error("Error adding suplier:", error);
-            alert("Error adding Product. Please try again.");
         }
     };
 
@@ -106,6 +177,59 @@ const Products = () => {
                 </button>
             </div>
 
+
+            <div>
+                <table className='w-full border-collapse border border-gray-300 mt-4'>
+                    <thead>
+                        <tr className='bg-gray-200'>
+                            <th className='border border-gray-300 p-2'>S_NO</th>
+                            <th className='border border-gray-300 p-2'>Product Name</th>
+                            <th className='border border-gray-300 p-2'>Category Name</th>
+                            <th className='border border-gray-300 p-2'>Supplier Number</th>
+                            <th className='border border-gray-300 p-2'>Price</th>
+                            <th className='border border-gray-300 p-2'>Stock</th>
+                            <th className='border border-gray-300 p-2'>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {products.map((product, index) => (
+                            <tr key={product._id}>
+                                <td className='border border-gray-300 p-2'>{index + 1}</td>
+                                <td className='border border-gray-300 p-2'>{product.name}</td>
+                                <td className='border border-gray-300 p-2'>{product.categoryId.categoryName}</td>
+                                <td className='border border-gray-300 p-2'>{product.supplierId.name}</td>
+                                <td className='border border-gray-300 p-2'>{product.price}</td>
+                                <td className='border border-gray-300 p-2'>
+                                    <span className='rounded-full font-semibold'>
+                                        {product.stock == 0 ? (
+                                            <span className='bg-red-100 text-red-500 py-1 rounded-full'>{product.stock}</span>
+                                        ) : product.stock < 5 ? (
+                                            <span className='bg-yellow-100 text-yellow-600 py-1 rounded-full'>{product.stock}</span>
+                                        ) : (<span className='bg-green-100 text-green-500 py-1 rounded-full'>{product.stock}</span>)}
+                                    </span>
+                                </td>
+                                <td className='border border-gray-300 p-2'>
+                                    <button
+                                        className='px-2 py-1 bg-yellow-500 text-white rounded cursor-pointer mr-2'
+                                        onClick={() => handleEdit(product)}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        className='px-2 py-1 bg-red-500 text-white rounded cursor-pointer'
+                                        onClick={() => handleDelete(product._id)}
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                {/* {filteredSuppliers.length === 0 && <div>No records</div>} */}
+            </div>
+
+
             {openModal && (
                 <div className='fixed top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center'>
 
@@ -114,7 +238,7 @@ const Products = () => {
 
                         <button
                             className='absolute top-4 right-4 font-bold cursor-pointer text-lg'
-                            onClick={() => setOpenModal(false)}
+                            onClick={closeModel}
                         >
                             X
                         </button>
@@ -156,7 +280,7 @@ const Products = () => {
                             <div className='w-full border'>
                                 <select name="categoryId"
                                     className='w-full p-2'
-                                    onChange={handleChange} 
+                                    onChange={handleChange}
                                     value={formData.categoryId}
                                 >
                                     <option value="">Select Category</option>
@@ -169,9 +293,9 @@ const Products = () => {
                             </div>
 
                             <div className='w-full border'>
-                                <select name="supplierId" 
+                                <select name="supplierId"
                                     className='w-full p-2'
-                                    onChange={handleChange} 
+                                    onChange={handleChange}
                                     value={formData.supplierId}
                                 >
                                     <option value="">Select Supplier</option>
@@ -188,13 +312,13 @@ const Products = () => {
                                     type="submit"
                                     className='w-full mt-2 rounded-md bg-green-500 text-white p-3 cursor-pointer hover:bg-green-600'
                                 >
-                                    Add Product
+                                    {editProduct ? "Save Changes" : "Add Product"}
                                 </button>
 
                                 <button
                                     type="button"
                                     className='w-full mt-2 rounded-md bg-red-500 text-white p-3 cursor-pointer hover:bg-red-600'
-                                    onClick={() => setOpenModal(false)}
+                                    onClick={closeModel}
                                 >
                                     Cancel
                                 </button>
