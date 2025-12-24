@@ -7,6 +7,7 @@ const Products = () => {
     const [categories, setCategories] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
     const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const [formData, setFormData] = useState({
         name: "",
         description: "",
@@ -17,7 +18,7 @@ const Products = () => {
     });
 
 
-    const fetchProducts= async () => {
+    const fetchProducts = async () => {
         try {
             const response = await axios.get("http://localhost:8000/api/products", {
                 headers: {
@@ -29,7 +30,8 @@ const Products = () => {
                 setSuppliers(response.data.suppliers);
                 setCategories(response.data.categories);
                 setProducts(response.data.products);
-
+                setFilteredProducts(response.data.products);
+                
             } else {
 
                 console.error("Error fetching products:", response.data.message);
@@ -133,7 +135,7 @@ const Products = () => {
                 );
 
                 if (response.data.success) {
-                    fetchProducts();  
+                    fetchProducts();
                     alert("Products added successfully!");
                     setOpenModal(false);
                     setFormData({
@@ -157,6 +159,44 @@ const Products = () => {
     };
 
 
+    const handleDelete = async (id) => {
+        const confirmDelete = window.confirm(
+            "Are you sure ! you want to delete this Product?")
+        if (confirmDelete) {
+            try {
+                const response = await axios.delete(
+                    `http://localhost:8000/api/products/${id}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
+                        },
+                    }
+                );
+
+                if (response.data.success) {
+                    alert("Products deleted successfully!");
+                    fetchProducts(); //Refresh the Supplliers list after deletion
+                } else {
+                    console.error("Error deleting Product", data);
+                    alert("Error deleting Product. please try again.");
+                }
+
+            } catch (error) {
+                console.error("Error deleting Product:", error);
+                alert("Error deleting supplier. Please try again.");
+            }
+        }
+    };
+
+
+
+    const handleSearch = (e) => {
+        setFilteredProducts(
+            products.filter((product) =>
+                product.name.toLowerCase().includes(e.target.value.toLowerCase()))
+        )
+    }
+
 
 
     return (
@@ -167,7 +207,7 @@ const Products = () => {
                     type="text"
                     placeholder='Search'
                     className='border p-1 bg-white rounded px-4'
-                // onChange={handleSearch}
+                    onChange={handleSearch}
                 />
                 <button
                     className='px-4 py-1.5 bg-blue-500 text-white rounded cursor-pointer'
@@ -192,7 +232,7 @@ const Products = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((product, index) => (
+                     {filteredProducts && filteredProducts.map((product, index) => (
                             <tr key={product._id}>
                                 <td className='border border-gray-300 p-2'>{index + 1}</td>
                                 <td className='border border-gray-300 p-2'>{product.name}</td>
@@ -226,7 +266,9 @@ const Products = () => {
                         ))}
                     </tbody>
                 </table>
-                {/* {filteredSuppliers.length === 0 && <div>No records</div>} */}
+
+                {filteredProducts.length === 0 && <div>No records </div> }
+
             </div>
 
 
@@ -271,6 +313,7 @@ const Products = () => {
                             <input
                                 type="number"
                                 name='stock'
+                                min = "0"
                                 value={formData.stock}
                                 onChange={handleChange}
                                 placeholder='Enter Stock'

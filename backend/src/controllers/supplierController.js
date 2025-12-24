@@ -89,3 +89,5 @@ const deleteSupplier = async (req, res) => {
 export {addSupplier, getSuppliers, updateSupplier, deleteSupplier};
 
 
+
+
