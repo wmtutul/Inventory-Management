@@ -8,6 +8,7 @@ import Categories from './components/Categories';
 import Suppliers from './components/Suppliers';
 import Products from './components/Products';
 import Logout from './components/Logout';
+import Users from './components/Users';
 
 const App = () => {
   return (
@@ -28,7 +29,7 @@ const App = () => {
           <Route path='products' element={<Products/>} />   
           <Route path='suppliers' element={<Suppliers/>} />   
           <Route path='orders' element={<h1>Orders</h1>} />   
-          <Route path='users' element={<h1>Users</h1>} />   
+          <Route path='users' element={<Users/>} />   
           <Route path='profile' element={<h1>Profile</h1>} />   
           <Route path='logout' element={<Logout/>} />   
         </Route>

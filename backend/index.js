@@ -7,6 +7,7 @@ import authRoutes from './src/routes/auth.js';
 import categoryRoutes from './src/routes/category.js';
 import supplierRoutes from './src/routes/supplier.js';
 import productRoutes from './src/routes/product.js';
+import userRoute from './src/routes/user.js';
 
 
 const app = express();
@@ -22,6 +23,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/category', categoryRoutes);
 app.use('/api/supplier', supplierRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/users', userRoute);
 
 
 
