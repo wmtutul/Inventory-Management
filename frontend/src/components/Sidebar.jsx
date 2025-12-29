@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {FaTable, FaHome, FaBox, FaTruck, FaShoppingCart, FaUsers, FaCog, FaSignOutAlt} from "react-icons/fa";
 import {NavLink} from 'react-router';
+import { useAuth } from '../context/AuthContext';
 
 const Sidebar = () => {
 
@@ -15,6 +16,21 @@ const Sidebar = () => {
     {name: "Logout", path: "/admin-dashboard/logout", icon: <FaSignOutAlt/>, isParent: false},
   ] 
 
+  const customerItems = [
+    {name: "Products", path: "/customer-dashboard/products", icon: <FaBox/>, isParent: false},
+    {name: "Orders", path: "/customer-dashboard/orders", icon: <FaShoppingCart/>, isParent: false},
+    {name: "Profile", path: "/customer-dashboard/profile", icon: <FaCog/>, isParent: false},
+    {name: "Logout", path: "/customer-dashboard/logout", icon: <FaSignOutAlt/>, isParent: false},
+  ]
+
+  const {user} = useAuth();
+  const [menuLinks, setMenuLinks] = useState(customerItems); 
+
+  useEffect(() => {
+    if(user && user.role === "admin"){
+      setMenuLinks(menuItems);
+    }
+  }, [])
 
   return (
     <div className='flex flex-col h-screen  bg-black text-white w-16 md:w-64 fixed'>
@@ -26,7 +42,7 @@ const Sidebar = () => {
       <div>
         <ul className='space-y-2 p-2'>
           {
-            menuItems.map((item) => (
+            menuLinks.map((item) => (
               <li key={item.name}>
                 <NavLink
                   end={item.isParent}
