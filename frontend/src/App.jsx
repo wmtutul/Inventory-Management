@@ -11,6 +11,7 @@ import Logout from './components/Logout';
 import Users from './components/Users';
 import CustomerProducts from './components/CustomerProducts';
 import Orders from './components/Orders';
+import Profile from './components/Profile';
 
 const App = () => {
   return (
@@ -39,6 +40,8 @@ const App = () => {
         <Route path='/customer-dashboard' element={<Dashboard/>} >
             <Route index element={<CustomerProducts/>}></Route>
             <Route path='orders' element={<Orders/>}></Route>
+            <Route path='profile' element={<Profile/>}></Route>
+            <Route path='logout' element={<Logout/>}></Route>
         </Route>
 
         <Route path='/login' element={<Login />} />

@@ -44,7 +44,6 @@ const Products = () => {
     };
 
 
-
     useEffect(() => {
         fetchProducts();
     }, []);
