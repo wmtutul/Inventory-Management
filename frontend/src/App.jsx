@@ -12,6 +12,7 @@ import Users from './components/Users';
 import CustomerProducts from './components/CustomerProducts';
 import Orders from './components/Orders';
 import Profile from './components/Profile';
+import Summary from './components/Summary';
 
 const App = () => {
   return (
@@ -27,7 +28,7 @@ const App = () => {
             </ProtectedRoutes>
             }
         >
-          <Route index element={<h1>Summary of dashboard</h1>} />   
+          <Route index element={<Summary/>} />   
           <Route path='categories' element={<Categories/>} />   
           <Route path='products' element={<Products/>} />   
           <Route path='suppliers' element={<Suppliers/>} />   
