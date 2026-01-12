@@ -12,8 +12,6 @@ pass: admin
 login: tutul@gmail.com
 pass: 123456
 
-Tiem:  25:00/53:35 , video-9 -----Running  -> dashboardController
-
 
 
 
