@@ -24,7 +24,7 @@ const Summary = () => {
                     Authorization: `Bearer ${localStorage.getItem("pos-token")}`,
                 },
             });
-            setDashboardData(response.data);
+            setDashboardData(response.data.dashboardData);
 
         } catch (error) {
             alert(error.message);
@@ -74,7 +74,7 @@ const Summary = () => {
                             {dashboardData.outOfStock.map((product, index) => (
                                 <li key={index} className='text-gray-600'>
                                     {product.name}{" "}
-                                    <span className='text-gray-400'>{(product.category.name)}</span>
+                                    <span className='text-gray-400'>{(product.categoryId.categoryName)}</span>
                                 </li>
                             ))}
                         </ul>
@@ -103,7 +103,7 @@ const Summary = () => {
                             {dashboardData.lowStock.map((product, index) => (
                                 <li key={index} className='text-gray-600'>
                                     <strong>{product.name}</strong> - {product.stock} left{" "}
-                                    <span className='text-gray-400'>{(product.category.name)}</span>
+                                    <span className='text-gray-400'>{(product.categoryId.categoryName)}</span>
                                 </li>
                             ))}
                         </ul>

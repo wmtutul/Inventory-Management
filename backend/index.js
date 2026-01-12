@@ -27,7 +27,8 @@ app.use('/api/supplier', supplierRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoute);
 app.use('/api/orders', orderRoute);
-app.use('/api/orders', dashboardRouter);
+app.use('/api/dashboard', dashboardRouter);
+
 
 
 
