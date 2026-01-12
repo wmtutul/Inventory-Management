@@ -172,8 +172,11 @@ const Suppliers = () => {
                 }
 
             } catch (error) {
-                console.error("Error deleting supplier:", error);
-                alert("Error deleting supplier. Please try again.");
+                if (error.response) {
+                    alert(error.response.data.message);
+                } else {
+                    alert("Error deleting supplier. Please try again.");
+                }
             }
         }
     };
@@ -182,8 +185,8 @@ const Suppliers = () => {
 
     const handleSearch = (e) => {
         setFilteredSuppliers(
-            suppliers.filter((supplier) => 
-             supplier.name.toLowerCase().includes(e.target.value.toLowerCase()))
+            suppliers.filter((supplier) =>
+                supplier.name.toLowerCase().includes(e.target.value.toLowerCase()))
         );
     }
 
@@ -195,10 +198,10 @@ const Suppliers = () => {
         <div className='w-full h-full flex flex-col gap-4 p-4'>
             <h1 className='text-2xl font-bold'>Supplier Management</h1>
             <div className='flex justify-between items-center'>
-                <input 
-                    type="text" 
-                    placeholder='Search' 
-                    className='border p-1 bg-white rounded px-4' 
+                <input
+                    type="text"
+                    placeholder='Search'
+                    className='border p-1 bg-white rounded px-4'
                     onChange={handleSearch}
                 />
                 <button

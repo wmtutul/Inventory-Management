@@ -33,20 +33,6 @@ const addOrder = async (req, res) => {
 }
 
 
-// const getOrders = async (req, res) => {
-//     try {
-//         const userId = req.user._id;
-//         const orders = await Order.find({customer: userId}).populate({path:'product', populate:{
-//             path: 'categoryId',
-//             select: 'categoryName'
-//         }, select: 'name price'}).populate('customer', 'name email');
-//         return res.status(200).json({success: true, orders});
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).json({success: false, error: "server error in fetching orderrs"});
-//     }
-// }
-
 const getOrders = async (req, res) => {
     try {
         const userId = req.user._id;
